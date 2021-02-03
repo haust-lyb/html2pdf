@@ -1,6 +1,8 @@
 package com.haiseer.html2pdf.controllers;
 
 
+import cn.hutool.cache.CacheUtil;
+import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
@@ -26,6 +28,16 @@ public class Html2PdfController {
 	@Value("${hsr.file.uploadPath}")
 	String uploadPath;
 
+	private static TimedCache<String, String> timedCache = CacheUtil.newTimedCache(1000 * 60 * 5);
+
+	@RequestMapping("bindData")
+	@ResponseBody
+	public String bindData(String jsonData){
+		String key = IdUtil.fastUUID();
+		timedCache.put(key,jsonData);
+		return key;
+	}
+
 	/**
 	 *
 	 * @param jsonData 模板绑定的数据
@@ -33,10 +45,26 @@ public class Html2PdfController {
 	 * @return
 	 */
 	@RequestMapping("renderTemplate")
-	public String index(String jsonData,String templateName, HttpServletRequest request){
+	public String renderTemplate(String jsonData,String templateName, HttpServletRequest request){
 		System.out.println("jsonData:"+jsonData);
 		System.out.println("templateName:"+templateName);
 		JSONObject jsonObject = JSONUtil.parseObj(jsonData);
+		request.setAttribute("data",jsonObject);
+		return templateName+".html";
+	}
+
+	/**
+	 *
+	 * @param key 绑定的数据
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("renderTemplateByKey")
+	public String renderTemplateByKey(String key,String templateName, HttpServletRequest request){
+		System.out.println("key:"+key);
+		System.out.println("keyvalue:"+timedCache.get(key));
+		System.out.println("templateName:"+templateName);
+		JSONObject jsonObject = JSONUtil.parseObj(timedCache.get(key));
 		request.setAttribute("data",jsonObject);
 		return templateName+".html";
 	}
