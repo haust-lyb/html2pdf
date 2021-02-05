@@ -1,14 +1,21 @@
 package com.haiseer.html2pdf;
 
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.symmetric.DES;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import cn.hutool.system.SystemUtil;
 import com.haiseer.html2pdf.util.PDF;
 import com.haiseer.html2pdf.util.PDFS;
 
+import javax.crypto.SecretKey;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -18,8 +25,13 @@ import java.util.HashMap;
  * @date 2020/11/30 下午4:26
  */
 public class MainTest {
-    public static void main(String[] args) {
-        System.out.println(SystemUtil.getUserInfo().getHomeDir());
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        byte[] base64_decode = Base64.decode("26ec7719b81d4fa7a9d9c992a13eed64");
+        byte[] byte_decode = "26ec7719b81d4fa7a9d9c992a13eed64".getBytes("UTF-8");
+        DES des = SecureUtil.des(byte_decode);
+        System.out.println(StrUtil.str(des.encrypt("yxl"),"UTF-8"));
+
+//        System.out.println(SystemUtil.getUserInfo().getHomeDir());
 //        test_pdf();
     }
 
