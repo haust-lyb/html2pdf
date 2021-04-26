@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台首页</title>
+    <script src="${ctxPath}/static/echarts/echarts.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="header smaller lighter green">快捷功能</h3>
+            <p></p>
+            <button @click="flushstatic" class="btn btn-app btn-success">
+                <i class="ace-icon fa fa-refresh bigger-230"></i>
+                执行静态化
+            </button>
+            <el-dialog title="gitee更新pages服务" :visible.sync="giteeFormVisib">
+                <el-form>
+                    <el-form-item label="gitee pages服务所在url">
+                        <el-input v-model="giteeform.giteePagesUrl" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="用户名">
+                        <el-input v-model="giteeform.username" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码">
+                        <el-input v-model="giteeform.password" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="在浏览器缓存该表单">
+                        <el-switch v-model="giteeform.catchInBrowser"></el-switch>
+                    </el-form-item>
+
+                </el-form>
+
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="giteeFormVisib=false">取消</el-button>
+                    <el-button type="success" @click="autoPublish4Gitee">更新</el-button>
+                </div>
+            </el-dialog>
+            <button @click="giteeFormVisib=true" class="btn btn-app btn-info">
+                <i class="ace-icon fa fa-refresh bigger-230"></i>
+                发布到gitee
+            </button>
+        </div>
+
+        <div class="col-xs-12">
+            <h3 class="header smaller lighter purple">近况和总览</h3>
+            <p></p>
+            <ul class="list-unstyled spaced">
+                <li>
+                    <i class="ace-icon fa fa-check bigger-110 green"></i>
+                    累计发送博客{{allBlogCount}}篇
+                </li>
+                <li>
+                    <i class="ace-icon fa fa-check bigger-110 green"></i>
+                    博客标签一共{{categaryCount}}个
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-xs-12">
+            <h3 class="header smaller lighter blue">相关的图表</h3>
+            <p></p>
+            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+            <div id="main" style="width: 600px;height:400px;"></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            allBlogCount: 33,
+            categaryCount: 27,
+            giteeFormVisib:false,
+            giteeform:{
+                catchInBrowser:false,
+                giteePagesUrl:"",
+                username:"",
+                password:""
+            }
+        },
+        mounted: function () {
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('main'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '今年每个月的博客数量'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['篇数']
+                },
+                xAxis: {
+                    data: ["1月", "2月", "3月", "4月", "5月", "6月","7月", "8月", "9月", "10月", "11月", "12月"]
+                },
+                yAxis: {},
+                series: [{
+                    name: '数量',
+                    type: 'bar',
+                    data: [5, 20, 36, 10, 10, 20,5, 20, 36, 10, 10, 20]
+                }]
+            };
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption(option);
+        },
+        methods: {
+            flushstatic: function () {
+                this.$confirm('更新并生成静态页面, 是否继续?', '确认框', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    $.ajax({
+                        url: "${ctxPath}/blog4static",
+                        success: function (rs) {
+                            layer.open({
+                                content: '静态化完成'
+                                , time: 3000
+                                , skin: 'msg'
+                            });
+                        }
+                    });
+                });
+            },
+            autoPublish4Gitee: function () {
+                let that = this;
+                $.ajax({
+                    url: "${ctxPath}/autoPublish4Gitee",
+                    type:"POST",
+                    data:{
+                        giteePagesUrl:"",
+                        username:"",
+                        password:""
+                    },
+                    success: function (rs) {
+                        layer.open({
+                            content: rs.message
+                            , time: 3000
+                            , skin: 'msg'
+                        });
+                    }
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>

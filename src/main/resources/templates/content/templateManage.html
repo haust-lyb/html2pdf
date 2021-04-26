@@ -1,0 +1,135 @@
+
+<head>
+    <meta charset="UTF-8">
+    <title>博客管理</title>
+    <style>
+        .dict { margin: 20px 0;clear:both ;text-align:left;font-size:12px;}
+
+        .dict a { line-height: 24px; height: 24px; display: inline-block; background: #fff; padding: 0px 11px; margin: 10px 5px 0 0; border-radius: 8px; -moz-transition: all 0.5s; -webkit-transition: all 0.5s; -o-transition: all 0.5s; transition: all 0.5s; }
+
+        .dict a { color: #FFF;text-decoration:none }
+
+        .dict a:hover { border-radius: 0; text-shadow: #000 1px 1px 1px }
+
+        .dict .pcolor a:nth-child(8n-7) { background: #8A9B0F }
+
+        .dict .pcolor a:nth-child(8n-6) { background: #EB6841 }
+
+        .dict .pcolor a:nth-child(8n-5) { background: #3FB8AF }
+
+        .dict .pcolor a:nth-child(8n-4) { background: #FE4365 }
+
+        .dict .pcolor a:nth-child(8n-3) { background: #FC9D9A }
+
+        .dict .pcolor a:nth-child(8n-2) { background: #EDC951 }
+
+        .dict .pcolor a:nth-child(8n-1) { background: #C8C8A9 }
+
+        .dict .pcolor a:nth-child(8n) { background: #83AF9B }
+
+        .dict .pcolor a:first-child { background: #036564 }
+
+        .dict .pcolor a:last-child { background: #3299BB }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <div style="padding: 10px;display: flex;justify-content: flex-end;">
+        <el-button type="success" @click="goto('templateAdd')">添加新的模板</el-button>
+    </div>
+    <el-table
+            :data="tableData"
+            border
+            style="width: 100%">
+
+        <el-table-column
+                prop="name"
+                label="模板名">
+        </el-table-column>
+        <el-table-column
+                prop="id"
+                label="模板ID">
+        </el-table-column>
+        <el-table-column
+                sortable
+                prop="createDateTimeStr"
+                label="创建日期">
+        </el-table-column>
+
+        <el-table-column
+                prop="desc"
+                label="简介">
+        </el-table-column>
+
+        <el-table-column label="操作">
+            <template slot-scope="scope">
+                <el-button
+                        size="mini"
+                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                <el-button
+                        size="mini"
+                        type="danger"
+                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            </template>
+        </el-table-column>
+
+
+    </el-table>
+</div>
+
+<script>
+
+    new Vue({
+        el:"#app",
+        data:{
+            tableData: []
+        },
+        mounted:function () {
+            $.ajax({
+                url:"${ctxPath}/queryAllTemplate",
+                type:"POST",
+                success:(res)=>{
+                    var that  = this;
+                    that.tableData = res.entity;
+                }
+            })
+        },
+        methods:{
+            handleEdit(index, row) {
+                console.log(index, row);
+                this.goto("templateEdit&id="+row.id);
+            },
+            handleDelete(index, row) {
+                var that = this;
+                console.log(index, row);
+                that.$confirm('此操作将永久删除该博客, 是否继续?', '提示').then(() => {
+                    $.ajax({
+                        url:"${ctxPath}/blog/delete",
+                        data:{
+                            id:row.id
+                        },
+                        success:(rs)=>{
+                            console.log(rs);
+                            that.$message({
+                                type: 'success',
+                                message: '删除成功!'
+                            });
+                            window.location.reload();
+                        }
+                    })
+
+                })
+
+            },
+            goto(page){
+                var targetUrl = window.location.href.replace(window.location.href.split("#page/")[1],page);
+                console.log("goto:"+targetUrl);
+                window.location.href = targetUrl;
+            }
+        }
+    })
+</script>
+
+</body>
+</html>

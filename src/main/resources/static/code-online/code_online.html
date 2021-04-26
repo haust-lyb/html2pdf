@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <title>网页编辑器</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="resource_files/codemirror.min.js"></script>
+    <link rel="stylesheet" href="resource_files/codemirror.min.css">
+    <script src="resource_files/htmlmixed.min.js"></script>
+    <script src="resource_files/css.min.js"></script>
+    <script src="resource_files/javascript.min.js"></script>
+    <script src="resource_files/xml.min.js"></script>
+    <script src="resource_files/closetag.min.js"></script>
+    <script src="resource_files/closebrackets.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+    <script src="../resources/vue.js"></script>
+    <script src="../resources/jquery-3.4.0.min.js"></script>
+    <style>
+
+        .container {
+            width: 98%;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto
+        }
+
+        /*.CodeMirror {*/
+        /*    min-height: 300px;;*/
+        /*    font-family: Menlo, Monaco, Consolas, "Andale Mono", "lucida console", "Courier New", monospace;*/
+        /*}*/
+
+        #textareaCode {
+            min-height: 300px
+        }
+
+        #iframeResult {
+            display: block;
+            overflow: hidden;
+            border: 0 !important;
+            min-width: 100px;
+            width: 100%;
+            min-height: 300px;
+            background-color: #fff
+        }
+
+        @media screen and (max-width: 768px) {
+            #textareaCode {
+                height: 300px
+            }
+
+            .CodeMirror {
+                height: 300px;
+                font-family: Menlo, Monaco, Consolas, "Andale Mono", "lucida console", "Courier New", monospace;
+            }
+
+            #iframeResult {
+                height: 300px
+            }
+
+            .form-inline {
+                padding: 6px 0 2px 0
+            }
+        }
+        .code-online-btn{
+            background: #b3e19d;color: white;
+            padding: 5px 8px;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/x-template" id="code-online">
+    <div style="box-sizing: border-box;border: 1px solid gray;padding: 10px;margin: 10px;background: whitesmoke">
+        <div style="padding:20px 0px;box-sizing: border-box">
+            <button @click="resetCode()" class="code-online-btn">重置到最初的代码</button>
+            <button @click="submitTryit()" class="code-online-btn">运行看当前效果</button>
+        </div>
+
+        <div style="display: flex;">
+            <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 50%;">
+                <textarea class="form-control" :id="textareaCode_id" name="textareaCode" style="display: none;">{{default_code}}</textarea>
+            </div>
+            <div :id="iframewrapper_id" style="border: 1px solid #b3e19d;box-sizing: border-box;width: 50%;">
+                <iframe frameborder="0" id="iframeResult" style="height: 100%;width: 100%;"></iframe>
+            </div>
+            <!--            <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 50%;" v-html="code_result"></div>-->
+        </div>
+    </div>
+</script>
+<script>
+    Vue.component('code-online', {
+        template: '#code-online',
+        name: "code-online",
+        props: ['source_code'],
+        data() {
+            return {
+                mixedMode: {
+                    name: "htmlmixed",
+                    scriptTypes: [{
+                        matches: /\/x-handlebars-template|\/x-mustache/i,
+                        mode: null
+                    },
+                        {
+                            matches: /(text|application)\/(x-)?vb(a|script)/i,
+                            mode: "vbscript"
+                        }]
+                },
+                editor: null,
+                textareaCode_id: this.uuid(5, 5),
+                iframewrapper_id: this.uuid(5, 5),
+                iframeResult_id: "",
+                default_code: ``,
+                code_result: ``
+            }
+        },
+        created() {
+            this.default_code = this.source_code;
+        },
+        mounted() {
+            var that = this;
+            console.log(this.uuid(5, 5))
+            that.editor = CodeMirror.fromTextArea(document.getElementById(that.textareaCode_id), {
+                mode: that.mixedMode,
+                selectionPointer: true,
+                lineNumbers: false,
+                matchBrackets: true,
+                indentUnit: 4,
+                indentWithTabs: true
+            });
+            that.submitTryit();
+        },
+        methods: {
+            uuid: function (len, radix) {
+                var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+                var uuid = [],
+                    i;
+                radix = radix || chars.length;
+
+                if (len) {
+                    // Compact form
+                    for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+                } else {
+                    // rfc4122, version 4 form
+                    var r;
+
+                    // rfc4122 requires these characters
+                    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+                    uuid[14] = '4';
+
+                    // Fill in random data.  At i==19 set the high bits of clock sequence as
+                    // per rfc4122, sec. 4.1.5
+                    for (i = 0; i < 36; i++) {
+                        if (!uuid[i]) {
+                            r = 0 | Math.random() * 16;
+                            uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                        }
+                    }
+                }
+                return uuid.join('');
+            },
+            resetCode: function () {
+                var that = this;
+                that.editor.getDoc().setValue(that.default_code);
+                that.submitTryit();
+            },
+            submitTryit: function () {
+                var that = this;
+                var text = that.editor.getValue();
+                // that.code_result = text;
+                var ifr = document.createElement("iframe");
+                ifr.setAttribute("frameborder", "0");
+                ifr.setAttribute("id", this.uuid(5, 5));
+                ifr.setAttribute("width", '100%');
+                ifr.setAttribute("height", '100%');
+                document.getElementById(that.iframewrapper_id).innerHTML = "";
+                document.getElementById(that.iframewrapper_id).appendChild(ifr);
+                var ifrw = (ifr.contentWindow) ? ifr.contentWindow : (ifr.contentDocument.document) ? ifr.contentDocument.document : ifr.contentDocument;
+                ifrw.document.open();
+                ifrw.document.write(text);
+                ifrw.document.close();
+            }
+        }
+    })
+</script>
+
+<!--<div id="app">-->
+<!--    <code-online :source_code="source_code1"></code-online>-->
+<!--    <code-online :source_code="source_code2"></code-online>-->
+<!--    <code-online :source_code="source_code3"></code-online>-->
+<!--</div>-->
+<!--<script>-->
+
+<!--    new Vue({-->
+<!--        el: "#app",-->
+<!--        data: {-->
+<!--            source_code1: `<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--<meta charset="utf-8">-->
+<!--<title>code-online</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<h1>我的第一个标题</h1>-->
+<!--<p>我的第一个段落。</p>-->
+
+<!--</body>-->
+<!--</html>`,-->
+<!--            source_code2: `<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--<meta charset="utf-8">-->
+<!--<title>code-online</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div style="background: #0a70b0;border-radius:50%;width: 100px;height: 100px;"></div>-->
+
+<!--</body>-->
+<!--</html>`,-->
+<!--            source_code3: `<!DOCTYPE html>-->
+<!--<html>-->
+<!--<head>-->
+<!--<meta charset="utf-8">-->
+<!--<title>code-online</title>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div style="background: red;min-height: 300px;">-->
+<!--哈哈哈-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>`-->
+<!--        },-->
+<!--        mounted: function () {-->
+<!--        }-->
+<!--    })-->
+<!--</script>-->
+
+</body>
+</html>

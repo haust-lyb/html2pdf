@@ -1,0 +1,75 @@
+<head>
+    <title>添加模板</title>
+    <style>
+        .el-form-item__content{
+            line-height: 22px !important;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+
+    <el-form label-width="80px">
+        <el-form-item label="模板名">
+            <el-input v-model="name"></el-input>
+        </el-form-item>
+        <el-form-item label="备注">
+            <el-input v-model="desc"></el-input>
+        </el-form-item>
+        <el-form-item label="模板内容">
+            <code-online ref="codeonline" :source_code="source_code"></code-online>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="success" @click="addTemplate" style="margin: 10px">提交</el-button>
+        </el-form-item>
+    </el-form>
+
+
+</div>
+<script>
+
+    function init(res){
+        new Vue({
+            el: "#app",
+            data: {
+                source_code:res,
+                name:"",
+                desc:""
+            },
+            mounted: function () {
+            },
+            methods:{
+                addTemplate(){
+                    var html = this.$refs.codeonline.getHtmlData();
+                    console.log(html);
+                    var parms = {
+                        name:this.name,
+                        html:html,
+                        desc:this.desc
+                    }
+                    $.ajax({
+                        url:"${ctxPath}/addTemplate",
+                        type:"POST",
+                        data:parms,
+                        success:function (res){
+                            console.log(res)
+                        }
+                    })
+                }
+            }
+        })
+    }
+
+    $.ajax({
+        url:"${ctxPath}/demoDemplate",
+        type:"POST",
+        success:function (res){
+            init(res);
+        }
+    })
+
+</script>
+
+</body>
+</html>
