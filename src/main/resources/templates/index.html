@@ -6,7 +6,7 @@
     <title>Welcome - haust_lyb</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-    <link rel="icon" type="image/x-icon" href="${ctxPath}/static/imgs/akali.png.icon.ico" />
+    <link rel="icon" type="image/x-icon" href="${ctxPath}/static/imgs/akali.png.icon.ico"/>
 
     <!--[if !IE]> -->
     <link rel="stylesheet" href="${ctxPath}/static/ace/assets/css/pace.css"/>
@@ -24,7 +24,8 @@
     <link rel="stylesheet" href="${ctxPath}/static/ace/assets/css/ace-fonts.css"/>
 
     <!-- ace styles -->
-    <link rel="stylesheet" href="${ctxPath}/static/ace/assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style"/>
+    <link rel="stylesheet" href="${ctxPath}/static/ace/assets/css/ace.css" class="ace-main-stylesheet"
+          id="main-ace-style"/>
 
     <!--[if lte IE 9]>
     <link rel="stylesheet" href="${ctxPath}/static/ace/assets/css/ace-part2.css" class="ace-main-stylesheet"/>
@@ -207,13 +208,13 @@
 
                 <!-- #section:basics/content.searchbox -->
                 <!--<div class="nav-search" id="nav-search">-->
-                    <!--<form class="form-search">-->
-								<!--<span class="input-icon">-->
-									<!--<input type="text" placeholder="Search ..." class="nav-search-input"-->
-                                           <!--id="nav-search-input" autocomplete="off"/>-->
-									<!--<i class="ace-icon fa fa-search nav-search-icon"></i>-->
-								<!--</span>-->
-                    <!--</form>-->
+                <!--<form class="form-search">-->
+                <!--<span class="input-icon">-->
+                <!--<input type="text" placeholder="Search ..." class="nav-search-input"-->
+                <!--id="nav-search-input" autocomplete="off"/>-->
+                <!--<i class="ace-icon fa fa-search nav-search-icon"></i>-->
+                <!--</span>-->
+                <!--</form>-->
                 <!--</div>&lt;!&ndash; /.nav-search &ndash;&gt;-->
 
                 <!-- /section:basics/content.searchbox -->
@@ -329,18 +330,18 @@
 
                 <!--&nbsp; &nbsp;-->
                 <!--<span class="action-buttons">-->
-							<!--<a href="#">-->
-								<!--<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>-->
-							<!--</a>-->
+                <!--<a href="#">-->
+                <!--<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>-->
+                <!--</a>-->
 
-							<!--<a href="#">-->
-								<!--<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>-->
-							<!--</a>-->
+                <!--<a href="#">-->
+                <!--<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>-->
+                <!--</a>-->
 
-							<!--<a href="#">-->
-								<!--<i class="ace-icon fa fa-rss-square orange bigger-150"></i>-->
-							<!--</a>-->
-						<!--</span>-->
+                <!--<a href="#">-->
+                <!--<i class="ace-icon fa fa-rss-square orange bigger-150"></i>-->
+                <!--</a>-->
+                <!--</span>-->
             </div>
 
             <!-- /section:basics/footer -->
@@ -405,7 +406,7 @@
 <script src="${ctxPath}/static/code-online/resource_files/closetag.min.js"></script>
 <script src="${ctxPath}/static/code-online/resource_files/closebrackets.min.js"></script>
 <!--[if lt IE 9]>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+<script src="${ctxPath}/static/code-online/resource_files/html5.min.js"></script>
 <![endif]-->
 
 <style>
@@ -455,8 +456,10 @@
             padding: 6px 0 2px 0
         }
     }
-    .code-online-btn{
-        background: #b3e19d;color: white;
+
+    .code-online-btn {
+        background: #b3e19d;
+        color: white;
         padding: 5px 8px;
     }
 
@@ -464,8 +467,8 @@
 <script type="text/x-template" id="code-online">
     <div style="box-sizing: border-box;border: 1px solid gray;padding: 10px;background: whitesmoke">
         <div style="padding-bottom: 10px;box-sizing: border-box;line-height:22px;">
-            <button @click.stop="resetCode()" class="code-online-btn">重置到最初的代码</button>
-            <button @click.stop="submitTryit()" class="code-online-btn">运行看当前效果</button>
+            <el-button @click="resetCode()" class="code-online-btn">重置到最初的代码</el-button>
+            <el-button @click="submitTryit()" class="code-online-btn">运行看当前效果</el-button>
         </div>
 
         <div style="display: flex;">
@@ -477,7 +480,7 @@
                         type="textarea"
                         style="width: 100%;height: 100%"
                         placeholder="测试数据（json格式）"
-                        v-model="jsonData">
+                        v-model="testData">
                 </el-input>
             </div>
             <!--            <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 50%;" v-html="code_result"></div>-->
@@ -491,7 +494,7 @@
     Vue.component('code-online', {
         template: '#code-online',
         name: "code-online",
-        props: ['source_code'],
+        props: ['source_code','test_data'],
         data() {
             return {
                 mixedMode: {
@@ -505,21 +508,21 @@
                             mode: "vbscript"
                         }]
                 },
-                jsonData:'{"msg":"在此处输入测试数据"}',
+                testData: "",
                 editor: null,
                 textareaCode_id: this.uuid(5, 5),
                 iframewrapper_id: this.uuid(5, 5),
                 iframeResult_id: "",
-                default_code: ``,
-                code_result: ``
+                default_code: ``
             }
         },
         created() {
             this.default_code = this.source_code;
+            this.testData = this.test_data || '{"msg1":"在此处输入测试数据","msg2":"啦啦啦"}';
         },
         mounted() {
             var that = this;
-            console.log("生成UUID："+this.uuid(5, 5))
+            console.log("生成UUID：" + this.uuid(5, 5))
             that.editor = CodeMirror.fromTextArea(document.getElementById(that.textareaCode_id), {
                 mode: that.mixedMode,
                 selectionPointer: true,
@@ -533,21 +536,17 @@
         methods: {
             uuid: function (len, radix) {
                 var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
-                var uuid = [],
-                    i;
+                var uuid = [], i;
                 radix = radix || chars.length;
-
                 if (len) {
                     // Compact form
                     for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
                 } else {
                     // rfc4122, version 4 form
                     var r;
-
                     // rfc4122 requires these characters
                     uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
                     uuid[14] = '4';
-
                     // Fill in random data.  At i==19 set the high bits of clock sequence as
                     // per rfc4122, sec. 4.1.5
                     for (i = 0; i < 36; i++) {
@@ -567,7 +566,7 @@
             submitTryit: function () {
                 var that = this;
                 var text = that.editor.getValue();
-                // that.code_result = text;
+                console.log(text);
                 var ifr = document.createElement("iframe");
                 ifr.setAttribute("frameborder", "0");
                 ifr.setAttribute("id", this.uuid(5, 5));
@@ -577,11 +576,24 @@
                 document.getElementById(that.iframewrapper_id).appendChild(ifr);
                 var ifrw = (ifr.contentWindow) ? ifr.contentWindow : (ifr.contentDocument.document) ? ifr.contentDocument.document : ifr.contentDocument;
                 ifrw.document.open();
-                ifrw.document.write(text);
-                ifrw.document.close();
+                $.ajax({
+                    url:"${ctxPath}/previewTemplate",
+                    type:"POST",
+                    async:false,
+                    data:{
+                        testData:that.testData,
+                        template:text
+                    },
+                    success:function(res){
+                        ifrw.document.write(res);
+                    }
+                })
             },
-            getHtmlData:function(){
+            getHtmlData: function () {
                 return this.editor.getValue();
+            },
+            getTestData: function () {
+                return this.testData;
             }
         }
     })
@@ -590,7 +602,7 @@
 
 <!-- Snow Start -->
 <style>
-    #Snow{
+    #Snow {
         position: fixed;
         top: 0;
         left: 0;
@@ -604,16 +616,16 @@
 <!-- Snow Start -->
 <canvas id="Snow"></canvas>
 <script>
-    if(screen && screen.width > 768){
-        (function() {
+    if (screen && screen.width > 768) {
+        (function () {
             var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame ||
-                function(callback) {
+                function (callback) {
                     window.setTimeout(callback, 1000 / 60);
                 };
             window.requestAnimationFrame = requestAnimationFrame;
         })();
 
-        (function() {
+        (function () {
             var flakes = [],
                 canvas = document.getElementById("Snow"),
                 ctx = canvas.getContext("2d"),
@@ -710,11 +722,11 @@
                 snow();
             };
 
-            document.addEventListener("mousemove", function(e) {
+            document.addEventListener("mousemove", function (e) {
                 mX = e.clientX,
                     mY = e.clientY
             });
-            window.addEventListener("resize", function() {
+            window.addEventListener("resize", function () {
                 canvas.width = window.innerWidth;
                 canvas.height = window.innerHeight;
             });

@@ -40,13 +40,20 @@
             mounted: function () {
             },
             methods:{
+                goto(page){
+                    var targetUrl = window.location.href.replace(window.location.href.split("#page/")[1],page);
+                    console.log("goto:"+targetUrl);
+                    window.location.href = targetUrl;
+                },
                 addTemplate(){
+                    var that = this;
                     var html = this.$refs.codeonline.getHtmlData();
-                    console.log(html);
+                    var testData = this.$refs.codeonline.getTestData();
                     var parms = {
                         name:this.name,
                         html:html,
-                        desc:this.desc
+                        desc:this.desc,
+                        testData:testData
                     }
                     $.ajax({
                         url:"${ctxPath}/addTemplate",
@@ -54,6 +61,10 @@
                         data:parms,
                         success:function (res){
                             console.log(res)
+                            alert(res.message);
+                            if (res.status == 0){
+                                that.goto("templateManage")
+                            }
                         }
                     })
                 }

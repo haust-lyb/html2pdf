@@ -17,7 +17,7 @@
             <el-input v-model="desc"></el-input>
         </el-form-item>
         <el-form-item label="模板内容">
-            <code-online ref="codeonline" :source_code="source_code"></code-online>
+            <code-online ref="codeonline" :source_code="source_code" :test_data="testData"></code-online>
         </el-form-item>
         <el-form-item>
             <el-button type="success" @click="editTemplate" style="margin: 10px">提交</el-button>
@@ -34,12 +34,14 @@
                 id:res.id,
                 source_code:res.html,
                 name:res.name,
-                desc:res.desc
+                desc:res.desc,
+                testData:res.testData
             },
             mounted: function () {
             },
             methods:{
                 editTemplate(){
+                    var that = this;
                     var html = this.$refs.codeonline.getHtmlData();
                     console.log(html);
                     var parms = {
@@ -53,7 +55,10 @@
                         type:"POST",
                         data:parms,
                         success:function (res){
-                            console.log(res)
+                            alert(res.message);
+                            if (res.status == 0){
+                                that.goto("templateManage")
+                            }
                         }
                     })
                 },

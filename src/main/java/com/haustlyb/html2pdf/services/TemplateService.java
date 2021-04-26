@@ -14,11 +14,12 @@ import java.util.List;
 @Transactional
 public class TemplateService {
 
-    public HSResult addTemplate(String html,String name,String desc){
+    public HSResult addTemplate(String html,String name,String desc,String testData){
         LYB_Template._create(LYB_Template.class,e->{
             e.setName(name);
             e.setHtml(html);
             e.setDesc(desc);
+            e.setTestData(testData);
         });
         return HSResult.saySuccess("添加成功");
     }
@@ -44,12 +45,13 @@ public class TemplateService {
         return HSResult.saySuccess("查询成功").confEntity(TemplateDTO.toInfoDTO(template));
     }
 
-    public HSResult editTemplate(String id, String html, String name, String desc) {
+    public HSResult editTemplate(String id, String html, String name, String desc,String testData) {
         LYB_Template template = (LYB_Template) HSUtil.query("FROM LYB_Template e where e.id = :id").setParameter("id", id).uniqueResult();
         template.update(e->{
             e.setHtml(html);
             e.setName(name);
             e.setDesc(desc);
+            e.setTestData(testData);
         });
         return HSResult.saySuccess("修改成功");
     }

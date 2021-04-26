@@ -1,5 +1,6 @@
 package com.haustlyb.html2pdf.controllers;
 
+import cn.hutool.core.util.StrUtil;
 import com.haustlyb.html2pdf.component.HSResult;
 import com.haustlyb.html2pdf.services.TemplateService;
 import io.swagger.annotations.Api;
@@ -10,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @Api(value = "PDF生成", tags = "PDF生成")
+@ApiIgnore
 public class TemplateController {
     @Autowired
     TemplateService templateService;
@@ -28,7 +31,8 @@ public class TemplateController {
                 "    <title>code-online</title>\n" +
                 "</head>\n" +
                 "<body>\n" +
-                "    <p>在此处编辑模板，数据占位符请使用如下格式${paramName}</p>\n" +
+                "    <p>在此处编辑模板，数据占位符请使用如下格式<span style=\"color:red;\">${msg1}</span></p>\n" +
+                "    <p>在此处编辑模板，数据占位符请使用如下格式<span style=\"color:blue;\">${msg2}</span></p>\n" +
                 "</body>\n" +
                 "</html>";
     }
@@ -38,11 +42,15 @@ public class TemplateController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "html", value = "模板内容", required = true),
             @ApiImplicitParam(name = "name", value = "模板名", required = true),
-            @ApiImplicitParam(name = "desc", value = "说明（备注）", required = false)
+            @ApiImplicitParam(name = "desc", value = "说明（备注）", required = false),
+            @ApiImplicitParam(name = "testData", value = "模板测试数据", required = false)
     })
     @ApiOperation(value = "添加模板", notes = "添加模板，模板为完整的HTML")
-    public HSResult addTemplate(String html, String name, String desc) {
-        return templateService.addTemplate(html, name, desc);
+    public HSResult addTemplate(String html, String name, String desc,String testData) {
+        if (StrUtil.isBlank(html) || StrUtil.isBlank(name)){
+            return HSResult.sayFail("添加失败，模板的内容和名字不能为空");
+        }
+        return templateService.addTemplate(html, name, desc,testData);
     }
 
     @PostMapping("editTemplate")
@@ -50,11 +58,15 @@ public class TemplateController {
             @ApiImplicitParam(name = "id", value = "模板内容id", required = true),
             @ApiImplicitParam(name = "html", value = "模板内容", required = true),
             @ApiImplicitParam(name = "name", value = "模板名", required = true),
-            @ApiImplicitParam(name = "desc", value = "说明（备注）", required = false)
+            @ApiImplicitParam(name = "desc", value = "说明（备注）", required = false),
+            @ApiImplicitParam(name = "testData", value = "模板测试数据", required = false)
     })
     @ApiOperation(value = "修改模板", notes = "修改模板，模板为完整的HTML")
-    public HSResult editTemplate(String id, String html, String name, String desc) {
-        return templateService.editTemplate(id, html, name, desc);
+    public HSResult editTemplate(String id, String html, String name, String desc,String testData) {
+        if (StrUtil.isBlank(id) || StrUtil.isBlank(html) || StrUtil.isBlank(name)){
+            return HSResult.sayFail("修改失败，模板的id，内容和名字均不能为空");
+        }
+        return templateService.editTemplate(id, html, name, desc,testData);
     }
 
     @PostMapping("deleteTemplate")

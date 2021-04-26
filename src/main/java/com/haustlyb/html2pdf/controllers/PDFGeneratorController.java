@@ -75,7 +75,7 @@ public class PDFGeneratorController {
             } else {
                 System.out.println("↑ command执行异常ERROR！");
             }
-            return HSResult.saySuccess("获取成功:"+basePath+pdfName);
+            return HSResult.saySuccess(basePath+pdfName);
         } catch (Exception e) {
             return HSResult.sayFail("获取失败");
         }
@@ -83,6 +83,7 @@ public class PDFGeneratorController {
 
 
     @GetMapping("rendTemplate")
+    @ApiIgnore
     public void rendTemplate(String targetId,HttpServletResponse response){
         HashMap metadata = timedCache.get(targetId);
         System.out.println(metadata);
@@ -100,18 +101,15 @@ public class PDFGeneratorController {
         }
     }
 
-    @GetMapping("previewTemplate")
-    public void rendTemplate(String template,String jsonData,HttpServletResponse response){
+    @PostMapping("previewTemplate")
+    @ResponseBody
+    @ApiIgnore
+    public String rendTemplate(String template,String testData,HttpServletResponse response){
         String html = template;
         Template t = groupTemplate.getTemplate(html);
-        JSONObject jsonObject = JSONUtil.parseObj(jsonData);
+        JSONObject jsonObject = JSONUtil.parseObj(testData);
         t.binding(jsonObject);
-        try {
-            response.setCharacterEncoding("UTF-8");
-            t.renderTo(response.getWriter());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return t.render();
     }
 
 
