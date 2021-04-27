@@ -7,63 +7,71 @@
 </head>
 <body>
 <div id="app">
+    <div>
+        <h2>系统简介</h2>
+        <h3>基于wkhtml2pdf、beetle，通过配置HTML的模板，设置PDF格式，通过接口调用方式传入数据和模板ID生成PDF文件。</h3>
+
+        <h3>
+            github: <a href="https://github.com/haust-lyb/html2pdf" target="_blank">https://github.com/haust-lyb/html2pdf</a>
+        </h3>
+    </div>
     <div class="row">
-        <div class="col-xs-12">
-            <h3 class="header smaller lighter green">快捷功能</h3>
-            <p></p>
-            <button @click="flushstatic" class="btn btn-app btn-success">
-                <i class="ace-icon fa fa-refresh bigger-230"></i>
-                执行静态化
-            </button>
-            <el-dialog title="gitee更新pages服务" :visible.sync="giteeFormVisib">
-                <el-form>
-                    <el-form-item label="gitee pages服务所在url">
-                        <el-input v-model="giteeform.giteePagesUrl" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="用户名">
-                        <el-input v-model="giteeform.username" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="密码">
-                        <el-input v-model="giteeform.password" autocomplete="off"></el-input>
-                    </el-form-item>
-                    <el-form-item label="在浏览器缓存该表单">
-                        <el-switch v-model="giteeform.catchInBrowser"></el-switch>
-                    </el-form-item>
+<!--        <div class="col-xs-12">-->
+<!--            <h3 class="header smaller lighter green">快捷功能</h3>-->
+<!--            <p></p>-->
+<!--            <button @click="flushstatic" class="btn btn-app btn-success">-->
+<!--                <i class="ace-icon fa fa-refresh bigger-230"></i>-->
+<!--                执行静态化-->
+<!--            </button>-->
+<!--            <el-dialog title="gitee更新pages服务" :visible.sync="giteeFormVisib">-->
+<!--                <el-form>-->
+<!--                    <el-form-item label="gitee pages服务所在url">-->
+<!--                        <el-input v-model="giteeform.giteePagesUrl" autocomplete="off"></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item label="用户名">-->
+<!--                        <el-input v-model="giteeform.username" autocomplete="off"></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item label="密码">-->
+<!--                        <el-input v-model="giteeform.password" autocomplete="off"></el-input>-->
+<!--                    </el-form-item>-->
+<!--                    <el-form-item label="在浏览器缓存该表单">-->
+<!--                        <el-switch v-model="giteeform.catchInBrowser"></el-switch>-->
+<!--                    </el-form-item>-->
 
-                </el-form>
+<!--                </el-form>-->
 
-                <div slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="giteeFormVisib=false">取消</el-button>
-                    <el-button type="success" @click="autoPublish4Gitee">更新</el-button>
-                </div>
-            </el-dialog>
-            <button @click="giteeFormVisib=true" class="btn btn-app btn-info">
-                <i class="ace-icon fa fa-refresh bigger-230"></i>
-                发布到gitee
-            </button>
-        </div>
+<!--                <div slot="footer" class="dialog-footer">-->
+<!--                    <el-button type="primary" @click="giteeFormVisib=false">取消</el-button>-->
+<!--                    <el-button type="success" @click="autoPublish4Gitee">更新</el-button>-->
+<!--                </div>-->
+<!--            </el-dialog>-->
+<!--            <button @click="giteeFormVisib=true" class="btn btn-app btn-info">-->
+<!--                <i class="ace-icon fa fa-refresh bigger-230"></i>-->
+<!--                发布到gitee-->
+<!--            </button>-->
+<!--        </div>-->
 
-        <div class="col-xs-12">
-            <h3 class="header smaller lighter purple">近况和总览</h3>
-            <p></p>
-            <ul class="list-unstyled spaced">
-                <li>
-                    <i class="ace-icon fa fa-check bigger-110 green"></i>
-                    累计发送博客{{allBlogCount}}篇
-                </li>
-                <li>
-                    <i class="ace-icon fa fa-check bigger-110 green"></i>
-                    博客标签一共{{categaryCount}}个
-                </li>
-            </ul>
-        </div>
+<!--        <div class="col-xs-12">-->
+<!--            <h3 class="header smaller lighter purple">近况和总览</h3>-->
+<!--            <p></p>-->
+<!--            <ul class="list-unstyled spaced">-->
+<!--                <li>-->
+<!--                    <i class="ace-icon fa fa-check bigger-110 green"></i>-->
+<!--                    累计发送博客{{allBlogCount}}篇-->
+<!--                </li>-->
+<!--                <li>-->
+<!--                    <i class="ace-icon fa fa-check bigger-110 green"></i>-->
+<!--                    博客标签一共{{categaryCount}}个-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
 
-        <div class="col-xs-12">
-            <h3 class="header smaller lighter blue">相关的图表</h3>
-            <p></p>
-            <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-            <div id="main" style="width: 600px;height:400px;"></div>
-        </div>
+<!--        <div class="col-xs-12">-->
+<!--            <h3 class="header smaller lighter blue">相关的图表</h3>-->
+<!--            <p></p>-->
+<!--            &lt;!&ndash; 为 ECharts 准备一个具备大小（宽高）的 DOM &ndash;&gt;-->
+<!--            <div id="main" style="width: 600px;height:400px;"></div>-->
+<!--        </div>-->
     </div>
 </div>
 

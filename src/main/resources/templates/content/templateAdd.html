@@ -1,7 +1,7 @@
 <head>
     <title>添加模板</title>
     <style>
-        .el-form-item__content{
+        .el-form-item__content {
             line-height: 22px !important;
         }
     </style>
@@ -20,49 +20,55 @@
         <el-form-item label="模板内容">
             <code-online ref="codeonline" :source_code="source_code"></code-online>
         </el-form-item>
-        <el-form-item>
-            <el-button type="success" @click="addTemplate" style="margin: 10px">提交</el-button>
-        </el-form-item>
     </el-form>
 
-
+    <div style="position: fixed;
+    right: 0px;
+    bottom: 0px;
+    width: calc(100% - 190px);
+    height: 59px;
+    background: white;
+    border-top: 1px solid gray;
+    z-index: 999999;box-sizing:border-box;padding-right:20px;display: flex;justify-content: flex-end;">
+        <el-button type="success" @click="addTemplate" style="margin: 10px">提交</el-button>
+    </div>
 </div>
 <script>
 
-    function init(res){
+    function init(res) {
         new Vue({
             el: "#app",
             data: {
-                source_code:res,
-                name:"",
-                desc:""
+                source_code: res,
+                name: "",
+                desc: ""
             },
             mounted: function () {
             },
-            methods:{
-                goto(page){
-                    var targetUrl = window.location.href.replace(window.location.href.split("#page/")[1],page);
-                    console.log("goto:"+targetUrl);
+            methods: {
+                goto(page) {
+                    var targetUrl = window.location.href.replace(window.location.href.split("#page/")[1], page);
+                    console.log("goto:" + targetUrl);
                     window.location.href = targetUrl;
                 },
-                addTemplate(){
+                addTemplate() {
                     var that = this;
                     var html = this.$refs.codeonline.getHtmlData();
                     var testData = this.$refs.codeonline.getTestData();
                     var parms = {
-                        name:this.name,
-                        html:html,
-                        desc:this.desc,
-                        testData:testData
+                        name: this.name,
+                        html: html,
+                        desc: this.desc,
+                        testData: testData
                     }
                     $.ajax({
-                        url:"${ctxPath}/addTemplate",
-                        type:"POST",
-                        data:parms,
-                        success:function (res){
+                        url: "${ctxPath}/addTemplate",
+                        type: "POST",
+                        data: parms,
+                        success: function (res) {
                             console.log(res)
                             alert(res.message);
-                            if (res.status == 0){
+                            if (res.status == 0) {
                                 that.goto("templateManage")
                             }
                         }
@@ -73,9 +79,9 @@
     }
 
     $.ajax({
-        url:"${ctxPath}/demoDemplate",
-        type:"POST",
-        success:function (res){
+        url: "${ctxPath}/demoDemplate",
+        type: "POST",
+        success: function (res) {
             init(res);
         }
     })

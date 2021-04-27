@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
-    <title>Welcome - haust_lyb</title>
+    <title>Welcome</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <link rel="icon" type="image/x-icon" href="${ctxPath}/static/imgs/akali.png.icon.ico"/>
@@ -98,7 +98,7 @@
             <a href="#" class="navbar-brand">
                 <small>
                     <i class="fa fa-leaf"></i>
-                    haust_lyb
+                    HTML2PDF
                 </small>
             </a>
 
@@ -472,21 +472,31 @@
         </div>
 
         <div style="display: flex;">
-            <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 50%;">
+            <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 100%;">
                 <textarea class="form-control" :id="textareaCode_id" name="textareaCode" style="display: none;">{{default_code}}</textarea>
             </div>
-            <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 50%;">
-                <el-input
-                        type="textarea"
-                        style="width: 100%;height: 100%"
-                        placeholder="测试数据（json格式）"
-                        v-model="testData">
-                </el-input>
-            </div>
+<!--            <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 50%;">-->
+<!--                <el-input-->
+<!--                        type="textarea"-->
+<!--                        style="width: 100%;height: 100%"-->
+<!--                        placeholder="测试数据（json格式）"-->
+<!--                        v-model="testData">-->
+<!--                </el-input>-->
+<!--            </div>-->
             <!--            <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 50%;" v-html="code_result"></div>-->
         </div>
-        <div :id="iframewrapper_id" style="border: 1px solid #b3e19d;box-sizing: border-box;width: 100%;">
-            <iframe frameborder="0" id="iframeResult" style="height: 100%;width: 100%;"></iframe>
+        <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 100%;">
+            <el-input
+                    type="textarea"
+                    style="width: 100%;"
+                    placeholder="测试数据（json格式）"
+                    v-model="testData">
+            </el-input>
+        </div>
+        <!--            <div style="border: 1px solid #b3e19d;box-sizing: border-box;width: 50%;" v-html="code_result"></div>-->
+
+        <div :id="iframewrapper_id"  style="min-height:30vh;border: 1px solid #b3e19d;box-sizing: border-box;width: 100%;">
+            <iframe frameborder="0" id="iframeResult" style="height: 30vh;width: 100%;"></iframe>
         </div>
     </div>
 </script>
@@ -571,7 +581,7 @@
                 ifr.setAttribute("frameborder", "0");
                 ifr.setAttribute("id", this.uuid(5, 5));
                 ifr.setAttribute("width", '100%');
-                ifr.setAttribute("height", '100%');
+                ifr.setAttribute("height", '500px');
                 document.getElementById(that.iframewrapper_id).innerHTML = "";
                 document.getElementById(that.iframewrapper_id).appendChild(ifr);
                 var ifrw = (ifr.contentWindow) ? ifr.contentWindow : (ifr.contentDocument.document) ? ifr.contentDocument.document : ifr.contentDocument;
@@ -586,6 +596,7 @@
                     },
                     success:function(res){
                         ifrw.document.write(res);
+                        ifrw.close();
                     }
                 })
             },
