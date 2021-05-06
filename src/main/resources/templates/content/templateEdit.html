@@ -56,11 +56,13 @@
                 editTemplate(){
                     var that = this;
                     var html = this.$refs.codeonline.getHtmlData();
+                    var testData = this.$refs.codeonline.getTestData();
                     console.log(html);
                     var parms = {
                         id:this.id,
                         name:this.name,
                         html:html,
+                        testData:testData,
                         desc:this.desc
                     }
                     $.ajax({
