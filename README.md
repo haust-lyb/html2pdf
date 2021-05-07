@@ -45,13 +45,23 @@ rpm -ivh wkhtmltox-0.12.6-1.centos7.x86_64.rpm
 别忘了保存后`source ~/.bash_profile`
 测试wkhtmltopdf的可用性，此处以百度首页为例
 `wkhtmltopdf https://www.baidu.com ./baidu.pdf`
+
 ![image](https://user-images.githubusercontent.com/23397828/117392628-0c4dad00-af25-11eb-84ee-74230406b364.png)
+
 如果你打开这个图片大概率会看到中文是无法显示的，因为centos7里面没有相关的字体
+
 解决方案：
-复制C:\Windows\Fonts\simsun.ttc(宋体)
-上传到服务器 /usr/share/fonts/chinese/TrueType/simsun.ttc
-simsun.ttc快速下载链接：
+
+复制windows计算机中C:\Windows\Fonts\simsun.ttc(宋体)，上传到服务器 /usr/share/fonts/chinese/TrueType/simsun.ttc
+
+对于找不到simsun.ttc的同学，可以点击这里的链接直接下载：simsun.ttc快速下载链接：https://github.com/haust-lyb/html2pdf/files/6438836/SIMSUN.TTC.zip 下载后需要解压使用
+
 再试试`wkhtmltopdf https://www.baidu.com ./baidu.pdf`发现成功显示了中文
+
+![image](https://user-images.githubusercontent.com/23397828/117394667-1ffb1280-af29-11eb-85c6-7aebd11ac1f2.png)
+
+到此wkhtmltopdf安装完毕
+
 
 ## 二、架构图
 
