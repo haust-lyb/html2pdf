@@ -13,7 +13,7 @@
 #### 1.2.1 安装htmltopdf
 
 这里我们以centos7为例
-首先去htmltopdf官网(https://wkhtmltopdf.org/downloads.html)下载centos7版本的rmp包。
+首先去htmltopdf官网(https://wkhtmltopdf.org/downloads.html) ,下载centos7版本的rmp包。
 ![image](https://user-images.githubusercontent.com/23397828/117391215-13bf8700-af22-11eb-8242-dd2994d94cdd.png)
 将下载的rmp包上传到服务器的/usr/local/html2pdf/source目录中，您也可以选择其他目录
 ```
@@ -71,5 +71,5 @@ beetl模板渲染，wkhtml2pdf根据模板和数据的渲染结果生成pdf文�
 
 ## 三、扩展或更改
 
-待补充。。。。
+待补充
 
