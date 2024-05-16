@@ -1,16 +1,71 @@
 # html2pdf文档
 
-## 一、使用步骤
-### 1.1 安装使用步骤概览
+## 一、how to use
+
+### run with docker 
+
+```shell
+docker run --name html2pdf -p 16666:16666 -v /Users/makabaka/html2pdf:/app/html2pdf -d liyibo888/html2pdf:v1
+```
+
+open browser http://localhost:16666/html2pdf 
+
+add template
+
+![img.png](img.png)
+
+then send rest request to generate pdf
+
+## GET generatePDFAndDownload
+
+GET http://localhost:16666/html2pdf/generatePDFAndDownload
+
+> Body 请求参数
+
+```json
+{
+  "templateId": "string",
+  "jsonData": "string"
+}
+```
+
+### 请求参数
+
+|名称|位置|类型|必选|说明|
+|---|---|---|---|---|
+|body|body|object| 否 |none|
+|» templateId|body|string| 是 |none|
+|» jsonData|body|string| 是 |none|
+
+> 返回示例
+
+> 200 Response
+
+```json
+{
+  "templateId": "1791005091357134848",
+  "jsonData": "{\"applyHospitalName\":\"市人民医院\"}"
+}
+```
+
+### 返回结果
+
+PDF file
+
+![img_1.png](img_1.png)
+
+### run with local [有点难]
+
+#### 1.1 安装使用步骤概览
 
 ![image](https://user-images.githubusercontent.com/23397828/117279085-edeba100-ae93-11eb-819d-a4ac5568c758.png)
 
 
-### 1.2 详细安装教程（其实也非常简单，对于学过springboot的同学来说看1.1足够了）
+#### 1.2 详细安装教程（其实也非常简单，对于学过springboot的同学来说看1.1足够了）
 
 待补充。。。。
 
-#### 1.2.1 安装htmltopdf
+##### 1.2.1 安装htmltopdf
 
 这里我们以centos7为例
 首先去htmltopdf官网(https://wkhtmltopdf.org/downloads.html) ,下载centos7版本的rmp包。
