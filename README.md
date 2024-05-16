@@ -2,7 +2,7 @@
 
 ## 一、how to use
 
-### run with docker 
+### 1、run with docker 
 
 ```shell
 docker run --name html2pdf -p 16666:16666 -v /Users/makabaka/html2pdf:/app/html2pdf -d liyibo888/html2pdf:v1
@@ -16,11 +16,11 @@ add template
 
 then send rest request to generate pdf
 
-## GET generatePDFAndDownload
+## rest api to generate a pdf
 
 GET http://localhost:16666/html2pdf/generatePDFAndDownload
 
-> Body 请求参数
+> Request Body 请求参数
 
 ```json
 {
@@ -37,9 +37,7 @@ GET http://localhost:16666/html2pdf/generatePDFAndDownload
 |» templateId|body|string| 是 |none|
 |» jsonData|body|string| 是 |none|
 
-> 返回示例
-
-> 200 Response
+> Request Body Example
 
 ```json
 {
@@ -54,7 +52,7 @@ PDF file
 
 ![img_1.png](img_1.png)
 
-### run with local [有点难]
+### 2、run with local [有点难，不推荐]
 
 #### 1.1 安装使用步骤概览
 
