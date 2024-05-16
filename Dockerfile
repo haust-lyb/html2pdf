@@ -30,6 +30,9 @@ RUN pwd
 # 使用 AdoptOpenJDK 镜像作为运行时环境
 FROM openjdk:8-jdk-alpine AS runtime
 
+# 安装wkhtmltopdf
+RUN apk add --no-cache wkhtmltopdf
+
 # 设置工作目录
 WORKDIR /app
 
