@@ -20,23 +20,24 @@ import java.util.HashMap;
 public class MainTest {
     public static void main(String[] args) throws UnsupportedEncodingException {
 //        System.out.println(SystemUtil.getUserInfo().getHomeDir());
-//        test_pdf();
+        test_pdf();
     }
 
     public static void test_pdf(){
 
         //模板的基础rest接口地址
-        String templateBaseAddress = "http://localhost:10002/renderTemplate";
+        String templateBaseAddress = "http://localhost:16666/html2pdf/renderTemplate";
         //生成PDF的rest接口地址
-        String serverAddress = "http://localhost:10002/generatePDF";
+        String serverAddress = "http://localhost:16666/html2pdf/generatePDF";
 
         //PDF1 所使用的数据
         HashMap data1 = new HashMap();
         data1.put("title","标题1");
         data1.put("name","患者姓名1");
+        data1.put("patientName","患者姓名1");
         data1.put("users", CollUtil.newArrayList("张三","李四","王五"));
         //数据的构建
-        PDF pdf = new PDF("a.pdf", encodeURI(templateBaseAddress + "?templateName=demo&jsonData=" + JSONUtil.toJsonStr(data1)));
+        PDF pdf = new PDF("a.pdf", encodeURI(templateBaseAddress + "?templateName=test&jsonData=" + JSONUtil.toJsonStr(data1)));
 
 
 

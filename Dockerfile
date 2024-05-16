@@ -30,14 +30,14 @@ RUN pwd
 # 使用 AdoptOpenJDK 镜像作为运行时环境
 FROM openjdk:8-jdk-alpine AS runtime
 
-# 安装wkhtmltopdf
-RUN apk add --no-cache wkhtmltopdf
-
 # 设置工作目录
 WORKDIR /app
 
 # 解决openjdk镜像中缺少字体导致无法生成验证码的问题【https://blog.csdn.net/weixin_42389247/article/details/108083842】
 RUN apk add --update font-adobe-100dpi ttf-dejavu fontconfig
+
+# 安装wkhtmltopdf
+RUN apk add --no-cache wkhtmltopdf
 
 # 从构建阶段中复制构建好的 JAR 文件到运行时环境
 COPY --from=build /app/target/*.jar app.jar
