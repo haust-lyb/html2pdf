@@ -39,6 +39,13 @@ RUN apk add --update font-adobe-100dpi ttf-dejavu fontconfig
 # 安装wkhtmltopdf
 RUN apk add --no-cache wkhtmltopdf
 
+# 解决汉语无法显示的问题
+RUN mkdir -p /usr/share/fonts/chinese/TrueType
+# 从上次构建阶段中复制SIMSUN
+COPY --from=build /app/SIMSUN.TTC /usr/share/fonts/chinese/TrueType/SIMSUN.TTC
+
+RUN ls /usr/share/fonts/chinese/TrueType/
+
 # 从构建阶段中复制构建好的 JAR 文件到运行时环境
 COPY --from=build /app/target/*.jar app.jar
 
