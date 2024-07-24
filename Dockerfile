@@ -33,11 +33,13 @@ FROM openjdk:8-jdk-alpine AS runtime
 # 设置工作目录
 WORKDIR /app
 
+RUN apk update
+
 # 解决openjdk镜像中缺少字体导致无法生成验证码的问题【https://blog.csdn.net/weixin_42389247/article/details/108083842】
 RUN apk add --update font-adobe-100dpi ttf-dejavu fontconfig
 
 # 安装wkhtmltopdf
-RUN apk add --no-cache wkhtmltopdf
+RUN apk add wkhtmltopdf
 
 # 解决汉语无法显示的问题
 RUN mkdir -p /usr/share/fonts/chinese/TrueType
