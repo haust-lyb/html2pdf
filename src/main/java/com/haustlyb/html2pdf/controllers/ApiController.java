@@ -28,11 +28,27 @@ public class ApiController {
             @ApiImplicitParam(name = "testData", value = "模板测试数据", required = false)
     })
     @ApiOperation(value = "添加模板", notes = "添加模板，模板为完整的HTML")
-    public HSResult addTemplate(String html, String name, String desc,String testData) {
-        if (StrUtil.isBlank(html) || StrUtil.isBlank(name)){
+    public HSResult addTemplate(String html, String name, String desc, String testData) {
+        if (StrUtil.isBlank(html) || StrUtil.isBlank(name)) {
             return HSResult.sayFail("添加失败，模板的内容和名字不能为空");
         }
-        return templateService.addTemplate(html, name, desc,testData);
+        return templateService.addTemplate(html, name, desc, testData);
+    }
+
+    @PostMapping("/editTemplate")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "模板id", required = true),
+            @ApiImplicitParam(name = "html", value = "模板内容", required = true),
+            @ApiImplicitParam(name = "name", value = "模板名", required = true),
+            @ApiImplicitParam(name = "desc", value = "说明（备注）", required = false),
+            @ApiImplicitParam(name = "testData", value = "模板测试数据", required = false)
+    })
+    @ApiOperation(value = "修改模板", notes = "修改模板，模板为完整的HTML")
+    public HSResult editTemplate(String id, String html, String name, String desc, String testData) {
+        if (StrUtil.isBlank(id) || StrUtil.isBlank(html) || StrUtil.isBlank(name)) {
+            return HSResult.sayFail("修改失败，模板的id、内容和名字不能为空");
+        }
+        return templateService.editTemplate(id, html, name, desc, testData);
     }
 
     @PostMapping("/deleteTemplate")
